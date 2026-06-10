@@ -1,0 +1,7 @@
+[package]
+name = "stereo_correspondence"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+opencv = "0.98.2"
