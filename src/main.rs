@@ -1,25 +1,13 @@
-use opencv::core;
-use opencv::imgproc;
 use opencv::prelude::*; // Import core traits
 use opencv::highgui;    // GUI module for image display
 use opencv::imgcodecs;  // Module for reading/writing images
 
-
 use std::env;
 
-fn gray_image( image : Mat ) -> Result<Mat, opencv::Error> {
-    let mut gray_image = Mat::default();
+mod stereo_functions;
+mod utilities;
 
-    imgproc::cvt_color( 
-        &image, 
-        &mut gray_image, 
-        imgproc::COLOR_BGR2GRAY, 
-        0,
-        core::AlgorithmHint::ALGO_HINT_DEFAULT,
-    )?;
-
-    Ok( gray_image )
-}
+use crate::utilities::image_utilities::*;
 
 fn main() -> opencv::Result<()> {
 
@@ -39,14 +27,20 @@ fn main() -> opencv::Result<()> {
         if image1.empty() || image2.empty() {
             println!("Error: Could not load images.");
         } else {
-
-            let gray_image1 = gray_image( image1 )?;
-            let gray_image2 = gray_image( image2 )?;
+            let gray_image1 = gray_image( &image1 )?;
+            let gray_image2 = gray_image( &image2 )?;
 
             // Display the image in a window
             highgui::imshow("Image Window1", &gray_image1)?;
             highgui::imshow("Image Window2", &gray_image2)?;
             
+            let image = get_window( &gray_image1, 
+                                                       400,
+                                                       600, 
+                                                       5 )?;
+
+            highgui::imshow("Image Window1sub", &image)?;
+
             // Wait for a key press indefinitely
             highgui::wait_key(0)?;
         }
