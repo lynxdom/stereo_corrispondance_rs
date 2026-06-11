@@ -34,6 +34,7 @@ fn main() -> opencv::Result<()> {
             highgui::imshow("Image Window1", &gray_image1)?;
             highgui::imshow("Image Window2", &gray_image2)?;
             
+            // 
             let image = get_window( &gray_image1, 
                                                        400,
                                                        600, 
