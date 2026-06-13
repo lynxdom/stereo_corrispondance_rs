@@ -3,14 +3,14 @@ use opencv::core::*;
 use opencv::imgproc;
 
 pub fn get_window<'img>(    image_: &'img Mat,
-                            x_: i32,
-                            y_: i32,
-                            r_: i32,
+                            x_: u32,
+                            y_: u32,
+                            r_: u32,
                         ) -> opencv::Result<BoxedRef<'img, Mat>> {
 
-    let left = x_ - r_;
-    let top = y_ - r_;
-    let size = 2 * r_ + 1;
+    let left = ( x_ - r_ ) as i32;
+    let top = ( y_ - r_ ) as i32;
+    let size = ( 2 * r_ + 1 ) as i32;
 
     let rect = Rect::new( left, 
                                       top, 

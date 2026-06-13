@@ -1,7 +1,8 @@
 use opencv::core::{Mat, MatTraitConst};
 
-pub fn ssd_comparison( left_ : &Mat,
-                       right_ : &Mat ) -> opencv::Result<f64> {
+pub fn ssd_comparison<T>( left_ : &T,
+                          right_ : &T ) -> opencv::Result<f64> 
+                       where  T :  MatTraitConst {
 
     assert_eq!(left_.cols(), right_.cols());
     assert_eq!(left_.rows(), right_.rows());
