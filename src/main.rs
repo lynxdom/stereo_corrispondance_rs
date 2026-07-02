@@ -92,7 +92,7 @@ fn main() -> opencv::Result<()> {
             highgui::imshow("Image Window1sub", &image)?;
 
             let plot = create_plot(&row_score)?;
-            highgui::imshow("SSD Plot", &plot)?;
+            highgui::imshow("SAD Plot", &plot)?;
 
             // Wait for a key press indefinitely
             highgui::wait_key(0)?;

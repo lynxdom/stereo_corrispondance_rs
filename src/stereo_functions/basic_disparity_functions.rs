@@ -1,7 +1,7 @@
 use opencv::core::{Mat, MatTraitConst};
 
 use crate::utilities::image_utilities::get_window;
-use crate::utilities::comparison_utilities::ssd_comparison;
+use crate::utilities::comparison_utilities::{ ComparisonTrait, SSDComparison, SADComparison };
 
 fn generate_disparity_map( _left_ : &Mat, 
                            _right_ : &Mat ) {
@@ -34,7 +34,8 @@ pub fn get_row_patch_score( source_ : &Mat,
                        row_, 
                        radius_)?;
 
-        score[ x as usize ] = ssd_comparison( &source_patch,
+        score[ x as usize ] = 
+            SADComparison::comparison_method( &source_patch,
                                               &target_patch )?;
         
     }
