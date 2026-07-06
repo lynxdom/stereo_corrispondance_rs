@@ -1,6 +1,6 @@
-use plotters::prelude::*;
 use opencv::core::*;
 use opencv::imgproc;
+use plotters::prelude::*;
 
 use opencv::boxed_ref::BoxedRef;
 
@@ -10,17 +10,18 @@ fn cv_err<E: std::fmt::Display>(e: E) -> opencv::Error {
     opencv::Error::new(StsError, format!("{}", e))
 }
 
-pub fn create_composite_plot_image<MatType>( plot : &MatType, 
-                                             target_row : &MatType,
-                                             source_row : &MatType) 
-                                -> opencv::Result<Mat>
-                                where MatType : MatTraitConst {
-
+pub fn create_composite_plot_image<MatType>(
+    plot: &MatType,
+    target_row: &MatType,
+    source_row: &MatType,
+) -> opencv::Result<Mat>
+where
+    MatType: MatTraitConst,
+{
     let height: i32 = plot.rows() + target_row.rows() + source_row.rows();
     let width: i32 = plot.cols().max(target_row.cols()).max(source_row.cols());
 
-    let mut result_image = 
-        Mat::new_rows_cols_with_default(
+    let mut result_image = Mat::new_rows_cols_with_default(
         height,
         width,
         opencv::core::CV_32FC3,
@@ -33,12 +34,7 @@ pub fn create_composite_plot_image<MatType>( plot : &MatType,
     // before returned.
     {
         let mut copy_into_result = |src: &MatType, y_offset: i32| -> opencv::Result<()> {
-            let rect = opencv::core::Rect::new(
-                0,
-                y_offset,
-                src.cols(),
-                src.rows(),
-            );
+            let rect = opencv::core::Rect::new(0, y_offset, src.cols(), src.rows());
 
             let mut roi = result_image.roi_mut(rect)?;
             src.copy_to(&mut roi)?;
@@ -55,7 +51,7 @@ pub fn create_composite_plot_image<MatType>( plot : &MatType,
         copy_into_result(plot, current_row)?;
     }
 
-    Ok( result_image )
+    Ok(result_image)
 }
 
 pub fn create_plot(values_: &Vec<f64>) -> opencv::Result<Mat> {
@@ -64,20 +60,13 @@ pub fn create_plot(values_: &Vec<f64>) -> opencv::Result<Mat> {
 
     let mut buffer = vec![255u8; (width * height * 3) as usize];
     {
-        let root = BitMapBackend::with_buffer(&mut buffer, (width, height))
-            .into_drawing_area();
+        let root = BitMapBackend::with_buffer(&mut buffer, (width, height)).into_drawing_area();
 
         root.fill(&WHITE).map_err(cv_err)?;
 
-        let min_value = values_
-            .iter()
-            .copied()
-            .fold(f64::INFINITY, f64::min);
+        let min_value = values_.iter().copied().fold(f64::INFINITY, f64::min);
 
-        let max_value = values_
-            .iter()
-            .copied()
-            .fold(f64::NEG_INFINITY, f64::max);
+        let max_value = values_.iter().copied().fold(f64::NEG_INFINITY, f64::max);
 
         let y_min = min_value;
         let y_max = if min_value == max_value {

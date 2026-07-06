@@ -1,3 +1,2 @@
-pub mod image_utilities;
 pub mod comparison_utilities;
-
+pub mod image_utilities;
