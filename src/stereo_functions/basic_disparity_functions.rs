@@ -75,7 +75,7 @@ pub fn find_useable_area(
         .iter()
         .zip(results2.iter())
         .rposition(|(a, b)| *a >= 0.80 && *b >= 0.80)
-        .unwrap_or(rows as usize - 1) as i32;
+        .unwrap_or(cols as usize - 1) as i32;
 
     Ok( ( left, top, right, bottom ) )
 }
